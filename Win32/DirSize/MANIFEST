@@ -1,5 +1,8 @@
 Changes
+win32dirsize.c
+win32dirsize.h
 DirSize.pm
+DirSize.xs
 Makefile.PL
 MANIFEST
 README

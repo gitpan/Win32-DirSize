@@ -1,14 +1,11 @@
-Win32/DirSize version 0.01
+Win32/DirSize version 1.00
 ==========================
 
 This module is written in 100% pure perl.  It requires only Win32::API to run.
 The best method to install is with nmake, but if you don't have that, you can
 copy the DirSize.pm file under perl\site\lib\Win32.
 
-In General, Win32::DirSize is 2-8x faster than calculating sizes via File::Find.
-
-Look for a future version of Win32::DirSize which will be utilize XS instead of
-Win32::API for enhanced performance.
+In general, Win32::DirSize is 2-8x faster than calculating sizes via File::Find.
 
 INSTALLATION
 
@@ -22,7 +19,7 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-  Win32::API
+None
 
 Copyright (C) 2003 Adam Rich <ar3121@sbc.com>
 
