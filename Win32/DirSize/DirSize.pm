@@ -3,11 +3,11 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.01
+	## version 1.02
 	##
-	## by Adam Rich <ar3121@sbc.com>
+	## by Adam Rich <arich@cpan.org>
 	##
-	## 3/8/2003
+	## 10/28/2003
 	##
 	##################################################################
 	##################################################################
@@ -48,7 +48,7 @@ our @EXPORT = qw(
 	best_convert
 	size_convert
 );
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 sub AUTOLOAD {
     my $constname;
@@ -227,6 +227,6 @@ truncated while being converted to a double float.
 
 =head1 AUTHOR
 
-Adam Rich (ar3121@sbc.com)
+Adam Rich (arich@cpan.org)
 
 =cut

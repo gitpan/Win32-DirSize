@@ -3,11 +3,11 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.01
+	## version 1.02
 	##
-	## by Adam Rich <ar3121@sbc.com>
+	## by Adam Rich <arich@cpan.org>
 	##
-	## 3/8/2003
+	## 10/28/2003
 	##
 	##################################################################
 	##################################################################
@@ -22,7 +22,6 @@
 #define DS_ERR_DIR_TOO_BIG		3
 #define DS_ERR_ACCESS_DENIED	4
 #define DS_ERR_OTHER			5
-
 
 // this is the main dir size function
 int _dir_size (AV *errs, int permsdie, int otherdie, char *dirname, unsigned long *hightotalsize, unsigned long *lowtotalsize, long *filecount, long *dircount);

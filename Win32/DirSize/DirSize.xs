@@ -3,11 +3,11 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.01
+	## version 1.02
 	##
-	## by Adam Rich <ar3121@sbc.com>
+	## by Adam Rich <arich@cpan.org>
 	##
-	## 3/8/2003
+	## 10/28/2003
 	##
 	##################################################################
 	##################################################################
@@ -148,7 +148,7 @@ constant(sv,arg)
 	RETVAL
 
 int 
-dir_size (dirname,dirinfo,permsdie=0,otherdie=0)
+dir_size (dirnamesv,dirinfo,permsdie=0,otherdie=0)
 	PREINIT:
 		AV *errs			= newAV();
 		HV *newdirinfo			= newHV();
@@ -156,18 +156,29 @@ dir_size (dirname,dirinfo,permsdie=0,otherdie=0)
 		unsigned long lowtotalsize	= 0;
 		long filecount			= 0;
 		long dircount			= 0;
-		int dirnamelen			= 0;
+		STRLEN dirnamelen		= 0;
+		char *dirname			= NULL;
+		char *pdest			= NULL;
+		int i				= 0;
 	INPUT:
+		SV *dirnamesv;
 		SV *dirinfo;
-		char *dirname;
 		int permsdie;
 		int otherdie;
 	CODE:
+		dirname = SvPV_nolen(dirnamesv);
+		dirnamelen = strlen(dirname);
+
+		while (pdest = strstr(dirname, "\\\\"))
+		  for (i = pdest - dirname; i < dirnamelen; i++)
+		    dirname[i] = dirname[i+1];
+
 		dirnamelen = strlen(dirname);
 		while (dirname[dirnamelen-1] == '\\') {
 			dirname[dirnamelen-1] = '\0';
 			dirnamelen = strlen(dirname);
 		}
+		sv_setpv(dirnamesv, (const char*)dirname);
 
 		RETVAL = _dir_size (errs, permsdie, otherdie, dirname, &hightotalsize, &lowtotalsize, &filecount, &dircount);
 		hv_store(newdirinfo, "Errors",		6, newRV_noinc((SV *)errs), 0);

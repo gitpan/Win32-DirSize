@@ -3,17 +3,17 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.01
+	## version 1.02
 	##
-	## by Adam Rich <ar3121@sbc.com>
+	## by Adam Rich <arich@cpan.org>
 	##
-	## 3/8/2003
+	## 10/28/2003
 	##
 	##################################################################
 	##################################################################
 */
 
-#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
 
 #include <stdlib.h>
 #include <windows.h>
