@@ -3,11 +3,11 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.11
+	## version 1.12
 	##
 	## by Adam Rich <arich@cpan.org>
 	##
-	## 12/15/2003
+	## 12/16/2003
 	##
 	##################################################################
 	##################################################################
@@ -349,27 +349,29 @@ double unit_convert (char unit, unsigned long hightotalsize, unsigned long lowto
 
 MODULE = Win32::DirSize		PACKAGE = Win32::DirSize
 
+PROTOTYPES: DISABLE
+
 double
-best_convert (char* unit, unsigned long highsize, unsigned long lowsize)
+best_convert (char& unit, unsigned long highsize, unsigned long lowsize)
 	CODE:
-			if (highsize	>= 268435456)	*unit = 'E';
-		else	if (highsize	>= 262144)	*unit = 'P';
-		else	if (highsize	>= 256)		*unit = 'T';
-		else	if (highsize	>= 1)		*unit = 'G';
-		else	if (lowsize	>= 1073741824)	*unit = 'G';
-		else	if (lowsize	>= 1048576)	*unit = 'M';
-		else	if (lowsize	>= 1024)	*unit = 'K';
-		else					*unit = 'B';
+			if (highsize	>= 268435456)	unit = 'E';
+		else	if (highsize	>= 262144)	unit = 'P';
+		else	if (highsize	>= 256)		unit = 'T';
+		else	if (highsize	>= 1)		unit = 'G';
+		else	if (lowsize	>= 1073741824)	unit = 'G';
+		else	if (lowsize	>= 1048576)	unit = 'M';
+		else	if (lowsize	>= 1024)	unit = 'K';
+		else					unit = 'B';
 	
-		RETVAL = unit_convert(*unit, highsize, lowsize);
+		RETVAL = unit_convert(unit, highsize, lowsize);
 	OUTPUT:
 		RETVAL
 		unit
 
 double
-size_convert (char* unit, unsigned long highsize, unsigned long lowsize)
+size_convert (char unit, unsigned long highsize, unsigned long lowsize)
 	CODE:
-		RETVAL = unit_convert(*unit, highsize, lowsize);
+		RETVAL = unit_convert(unit, highsize, lowsize);
 	OUTPUT:
 		RETVAL
 

@@ -1,4 +1,4 @@
-Win32/DirSize version 1.11
+Win32/DirSize version 1.12
 ==========================
 
 This module is written using C / XS.  It does not require any other modules,
