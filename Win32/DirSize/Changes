@@ -7,3 +7,7 @@ Revision history for Perl extension Win32::DirSize.
 	- re-written to use XS
 	- fixed bug whereby "exabytes" came after "terabytes"
 		instead of "petabytes"
+1.01  Fri Aug  8 13:44:40 2003
+	- fixed bug whereby best_convert() would incorrectly
+		return -1 for sizes under 1024 bytes.
+	- corrected readme file

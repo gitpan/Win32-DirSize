@@ -3,7 +3,7 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.00
+	## version 1.01
 	##
 	## by Adam Rich <ar3121@sbc.com>
 	##
@@ -48,7 +48,7 @@ our @EXPORT = qw(
 	best_convert
 	size_convert
 );
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 sub AUTOLOAD {
     my $constname;
@@ -209,9 +209,10 @@ double float format.
 
 size_convert() can be used to convert the directory size in bytes calculated by dir_size() into 
 another unit.  The units to choose from include k, M, G, T, P, E for kilobytes, megabytes, gigabytes,
-terabytes, petabytes, and exabytes respectively.  Keep in mind that if you have an extremely large
-size value stored in highsize/lowsize and don't choose a large enough unit for it, the returned
-value may get truncated while being converted to a double float.
+terabytes, petabytes, and exabytes respectively.  If you provide an invalid unit, this function 
+will return -1 to indicate an error.  Keep in mind that if you have an extremely large size value 
+stored in highsize/lowsize and don't choose a large enough unit for it, the returned value may get 
+truncated while being converted to a double float.
 
 =back
 

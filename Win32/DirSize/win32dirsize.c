@@ -3,7 +3,7 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.00
+	## version 1.01
 	##
 	## by Adam Rich <ar3121@sbc.com>
 	##
@@ -63,6 +63,9 @@ double _size_convert (char unit, unsigned long hightotalsize, unsigned long lowt
 		case 'K':
 		case 'k':
 			converted /= 1024.0;
+			break;
+		case 'B':
+		case 'b':
 			break;
 		default :
 			converted = -1.0; // means unknown unit
