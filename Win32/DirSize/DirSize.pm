@@ -3,7 +3,7 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.10
+	## version 1.11
 	##
 	## by Adam Rich <arich@cpan.org>
 	##
@@ -54,7 +54,7 @@ our @EXPORT = qw(
 	size_convert
 	disk_space
 );
-our $VERSION = '1.10';
+our $VERSION = '1.11';
 
 bootstrap Win32::DirSize $VERSION;
 
@@ -161,8 +161,8 @@ enabled.  (See the disk_space() function)
 
 Since drive and directory sizes on Win32 systems can easily reach the 
 multi-terabyte range and beyond, and the result perl can store in a single 
-32-bit integer is 2 GB, it's not possible to return an accurate result in a 
-single variable.  So, the Win32 API and this module return the result in two 
+32-bit integer is 3.999 GB, it's not possible to return an accurate result in 
+a single variable.  So, the Win32 API and this module return the result in two 
 separate values representing the least and most significant 32 bits.  This 
 module also provides the result as a string value, suitable for printing and use 
 with Math::BigInt.  Be aware that doing any math on the string value will 

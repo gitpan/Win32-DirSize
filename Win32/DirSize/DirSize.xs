@@ -3,7 +3,7 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.10
+	## version 1.11
 	##
 	## by Adam Rich <arich@cpan.org>
 	##
@@ -355,6 +355,7 @@ best_convert (char* unit, unsigned long highsize, unsigned long lowsize)
 			if (highsize	>= 268435456)	*unit = 'E';
 		else	if (highsize	>= 262144)	*unit = 'P';
 		else	if (highsize	>= 256)		*unit = 'T';
+		else	if (highsize	>= 1)		*unit = 'G';
 		else	if (lowsize	>= 1073741824)	*unit = 'G';
 		else	if (lowsize	>= 1048576)	*unit = 'M';
 		else	if (lowsize	>= 1024)	*unit = 'K';
