@@ -21,3 +21,17 @@ Revision history for Perl extension Win32::DirSize.
 1.03  Wed Oct 29 09:50:24 2003
 	- fixed "Modification of a read-only value attempted"
 		error message
+1.10  Mon Dec 15 12:15:02 2003
+	- rewrote almost completely from the ground up (So the
+		code is now cleaner, more efficient, maybe
+		faster too)
+	- added support for Unicode paths.
+	- added support for paths longer than 260 characters.
+	- added support for "Size on Disk" calculation
+		(Thanks for Victor Dozal for the suggestion)
+	- added support for entire-disk size & free calculaton.
+	- added string representation of 64-bit numbers.
+	- fixed bug preventing scanning of UNC paths.
+	- exported constants using the constant module, rather
+		than the XS method.
+

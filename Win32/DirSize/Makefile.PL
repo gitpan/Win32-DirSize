@@ -10,7 +10,7 @@ WriteMakefile(
 	AUTHOR				=> 'Adam Rich <arich@cpan.org>',
 	) : ()),
     'LIBS'				=> ['Kernel32.lib'],
-    'DEFINE'			=> '',
+    'DEFINE'			=> '/TP /W3',
     'INC'				=> '',
-    'OBJECT'		=> '$(O_FILES)',
+    'OBJECT'			=> '$(O_FILES)',
 );
