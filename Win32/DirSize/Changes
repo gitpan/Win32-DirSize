@@ -18,3 +18,6 @@ Revision history for Perl extension Win32::DirSize.
 		ppm version not installing properly.
 	- added double-slash removal code.
 	- small documentation changes.
+1.03  Wed Oct 29 09:50:24 2003
+	- fixed "Modification of a read-only value attempted"
+		error message

@@ -3,11 +3,11 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.02
+	## version 1.03
 	##
 	## by Adam Rich <arich@cpan.org>
 	##
-	## 10/28/2003
+	## 10/29/2003
 	##
 	##################################################################
 	##################################################################
@@ -178,7 +178,7 @@ dir_size (dirnamesv,dirinfo,permsdie=0,otherdie=0)
 			dirname[dirnamelen-1] = '\0';
 			dirnamelen = strlen(dirname);
 		}
-		sv_setpv(dirnamesv, (const char*)dirname);
+		// if (! SvREADONLY(dirnamesv)) sv_setpv(dirnamesv, (const char*)dirname);
 
 		RETVAL = _dir_size (errs, permsdie, otherdie, dirname, &hightotalsize, &lowtotalsize, &filecount, &dircount);
 		hv_store(newdirinfo, "Errors",		6, newRV_noinc((SV *)errs), 0);
