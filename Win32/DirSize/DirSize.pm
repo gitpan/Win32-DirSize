@@ -3,11 +3,11 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.12
+	## version 1.13
 	##
 	## by Adam Rich <arich@cpan.org>
 	##
-	## 12/16/2003
+	## 05/02/2005
 	##
 	##################################################################
 	##################################################################
@@ -54,7 +54,7 @@ our @EXPORT = qw(
 	size_convert
 	disk_space
 );
-our $VERSION = '1.12';
+our $VERSION = '1.13';
 
 bootstrap Win32::DirSize $VERSION;
 
@@ -70,10 +70,9 @@ Win32::DirSize - Calculate sizes of directories on Win32
  use strict;  
  use Win32::DirSize;
  
- my $DirInfo;  # this stores the directory information
  my $Result = dir_size(
    "C:\\TEMP",
-   $DirInfo,
+   my $DirInfo, # this stores the directory information
  );
  
  if ($Result == DS_RESULT_OK) {
@@ -85,23 +84,21 @@ Win32::DirSize - Calculate sizes of directories on Win32
    # If you don't want to display results in bytes,
    # let the module determine the best unit.
    
-   my $SizeUnit;
-   my $ConvSize = best_convert(
-     $SizeUnit, 
+   my $Size = best_convert(
+     my $SizeUnit, 
      $DirInfo->{HighSize}, 
      $DirInfo->{LowSize},
    );
-   print "Dir size = $ConvSize $SizeUnit \n";
+   print "Dir size = $Size $SizeUnit \n";
 
-   my $SizeOnDiskUnit;
-   my $ConvSizeOnDisk = best_convert(
-     $SizeOnDiskUnit, 
+   my $SizeOnDisk = best_convert(
+     my $SizeOnDiskUnit, 
      $DirInfo->{HighSizeOnDisk}, 
      $DirInfo->{LowSizeOnDisk},
    );
-   print "Dir size on disk = $ConvSizeOnDisk $SizeOnDiskUnit \n";
-
+   print "Dir size on disk = $SizeOnDisk $SizeOnDiskUnit \n";
  }
+
  # display any errors
  if (@{$DirInfo->{Errors}}) {
   foreach my $Error (@{$DirInfo->{Errors}}) {
@@ -113,39 +110,36 @@ Win32::DirSize - Calculate sizes of directories on Win32
   }
  }
 
- my $DiskInfo;  # this stores the disk information
  my $Result = disk_space(
    "C:",
-   $DiskInfo,
+   my $DiskInfo, # this stores the disk information
  );
+
  if ($Result == DS_RESULT_OK) {
    print "Disk Size = $DiskInfo->{TotalBytes} bytes \n";
    print "Disk Free = $DiskInfo->{FreeBytes} bytes \n";
    print "Quota Free = $DiskInfo->{QuotaBytes} bytes \n";
 
    # Again, you can convert to human-readable size.
-   my ($DiskSizeUnit, $DiskFreeUnit, $QuotaFreeUnit);
-   my ($ConvDiskDize, $ConvDiskFree, $ConvQuotaFree);
-
-   $ConvDiskDize = best_convert(
-     $DiskSizeUnit, 
+   my $DiskDize = best_convert(
+     my $DiskSizeUnit, 
      $DiskInfo->{HighTotalBytes}, 
      $DiskInfo->{LowTotalBytes},
    );
-   $ConvDiskFree = best_convert(
-     $DiskFreeUnit, 
+   my $DiskFree = best_convert(
+     my $DiskFreeUnit, 
      $DiskInfo->{HighFreeBytes}, 
      $DiskInfo->{LowFreeBytes},
    );
-   $ConvQuotaFree = best_convert(
-     $QuotaFreeUnit, 
+   my $QuotaFree = best_convert(
+     my $QuotaFreeUnit, 
      $DiskInfo->{HighQuotaBytes}, 
      $DiskInfo->{LowQuotaBytes},
    );
 
-   print "Disk Size = $ConvDiskDize $DiskSizeUnit \n";
-   print "Disk Free = $ConvDiskFree $DiskFreeUnit \n";
-   print "Quota Free = $ConvQuotaFree $QuotaFreeUnit \n";
+   print "Disk Size = $DiskDize $DiskSizeUnit \n";
+   print "Disk Free = $DiskFree $DiskFreeUnit \n";
+   print "Quota Free = $QuotaFree $QuotaFreeUnit \n";
  }
 
 =head1 DESCRIPTION
@@ -166,13 +160,13 @@ a single variable.  So, the Win32 API and this module return the result in two
 separate values representing the least and most significant 32 bits.  This 
 module also provides the result as a string value, suitable for printing and use 
 with Math::BigInt.  Be aware that doing any math on the string value will 
-convert it to a floating point value internally and you will lose accuracy.
+convert it to a floating point value internally and you will lose precision.
 
 Two convenience functions are provided to help convert the raw byte-sizes into 
 more human-readable form: size_convert() and best_convert().  These functions 
 take as input the two 32-bit integers making up the upper and lower 32 bits of 
 the 64-bit size value and use floating point math to convert the value to 
-another unit.
+another unit (some precision lost).
 
 =head2 Function definitions
 
@@ -194,7 +188,7 @@ The hashref will contain 9 keys:
 This is a string value representing the directory size in bytes.  This should be 
 suitable for printing and use with Math::BigInt.  Be aware that doing any math 
 on the string value will convert it to a floating point value internally and you 
-will lose accuracy.
+will lose precision.
 
 =item HighSize
 
@@ -286,7 +280,7 @@ The hashref will contain 9 keys:
 This is a string value representing the total size of the disk, in bytes. This 
 should be suitable for printing and use with Math::BigInt.  Be aware that doing 
 any math on the string value will convert it to a floating point value 
-internally and you will lose accuracy.
+internally and you will lose precision.
 
 =item HighTotalBytes
 
@@ -305,7 +299,7 @@ that if quotas are enabled, the user may not have access to the entire amount of
 this storage (see QuotaBytes below, instead).  This should be suitable for 
 printing and use with Math::BigInt.  Be aware that doing any math on the string 
 value will convert it to a floating point value internally and you will lose 
-accuracy.
+precision.
 
 =item HighFreeBytes
 
@@ -324,7 +318,7 @@ user has access to, under the current quota setting.  If quotas are not enabled,
 this value will be identical to the 'FreeBytes' value.  This should be suitable 
 for printing and use with Math::BigInt.  Be aware that doing any math on the 
 string value will convert it to a floating point value internally and you will 
-lose accuracy.
+lose precision.
 
 =item HighQuotaBytes
 
@@ -346,7 +340,7 @@ size_convert() to convert them to a human-readable unit.
 best_convert() is used to convert a size in bytes calculated by dir_size() or 
 disk_space() into the best printable format automatically.  The variable you 
 passed in for the "unit" parameter is set to the unit chosen.  The result is 
-returned in a floating point format.
+returned in a floating point format. (some precision lost)
 
 =item size_convert(unit, highsize, lowsize)
 
@@ -354,9 +348,7 @@ size_convert() can be used to convert the directory size in bytes calculated by
 dir_size() or disk_space() into another unit.  The units to choose from include 
 k, M, G, T, P, E for kibibytes, mebibytes, gibibytes, tebibytes, pebibytes, and 
 exbibytes respectively.  If you provide an invalid unit, this function will 
-return -1 to indicate an error.  Keep in mind that if you have an extremely 
-large size value stored in highsize/lowsize and don't choose a large enough unit 
-for it, the returned value may get truncated while being converted to a float.
+return -1 to indicate an error.  
 
 =back
 

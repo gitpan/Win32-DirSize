@@ -3,11 +3,11 @@
 	##################################################################
 	##
 	## Win32::DirSize
-	## version 1.12
+	## version 1.13
 	##
 	## by Adam Rich <arich@cpan.org>
 	##
-	## 12/16/2003
+	## 05/02/2005
 	##
 	##################################################################
 	##################################################################
@@ -97,7 +97,7 @@ int process_dir(wchar_t* dirname, AV *averrs, PDIR_SCAN_DATA pscandata) {
 	HANDLE			hdl;
 
 	// Remove trailing slash
-	while (dirname[wcslen(dirname)-1] == L'\\') 
+	while (dirname[wcslen(dirname)-1] == L'\\')
 		dirname[wcslen(dirname)-1] = L'\0';
 
 	// Make sure it's not passed in empty
@@ -165,11 +165,6 @@ int process_dir(wchar_t* dirname, AV *averrs, PDIR_SCAN_DATA pscandata) {
 		wchar_t *fullpath = NULL;
 
 		fullpath = (wchar_t *)malloc((wcslen(dirname) + wcslen(finddata.cFileName) + 2) * sizeof(wchar_t));
-		wcscpy(fullpath, dirname);
-		wcscat(fullpath, L"\\");
-		wcscat(fullpath, finddata.cFileName);
-
-		if (debug) wprintf(L"Fullpath = [%s].\n", fullpath);
 
 		// Who runs out of memory these days, anyway?
 		if (fullpath == NULL) {
@@ -180,10 +175,16 @@ int process_dir(wchar_t* dirname, AV *averrs, PDIR_SCAN_DATA pscandata) {
 			return DS_ERR_OUT_OF_MEM;
 		}
 
+		wcscpy(fullpath, dirname);
+		wcscat(fullpath, L"\\");
+		wcscat(fullpath, finddata.cFileName);
+
+		if (debug) wprintf(L"Fullpath = [%s].\n", fullpath);
+
 		if (finddata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 			// We're in a directory
 
-			// Ignore . and .. 
+			// Ignore . and ..
 			if (wcscmp(L".", finddata.cFileName) != 0 && wcscmp(L"..", finddata.cFileName) != 0) {
 				int process_result = 0;
 
@@ -211,7 +212,7 @@ int process_dir(wchar_t* dirname, AV *averrs, PDIR_SCAN_DATA pscandata) {
 			DWORD sizeondisklow;
 			DWORD sizeondiskhigh;
 			DWORD sizeondiskmod;
-			
+
 			filesize.QuadPart	= 0;
 			sizeondisk.QuadPart	= 0;
 
@@ -242,7 +243,7 @@ int process_dir(wchar_t* dirname, AV *averrs, PDIR_SCAN_DATA pscandata) {
 					free (fullpath);
 					FindClose (hdl);
 					return DS_ERR_ACCESS_DENIED;
-				} 
+				}
 				if (otherdie) {
 					free (wildcard);
 					free (fullpath);
@@ -287,7 +288,7 @@ int process_dir(wchar_t* dirname, AV *averrs, PDIR_SCAN_DATA pscandata) {
 
 			if (nErr == ERROR_NO_MORE_FILES) {
 				// Normal result, no more files found in this dir.
-				
+
 				return DS_RESULT_OK;
 			}
 			else {
@@ -304,7 +305,7 @@ int process_dir(wchar_t* dirname, AV *averrs, PDIR_SCAN_DATA pscandata) {
 					if (otherdie) return DS_ERR_OTHER;
 					else return DS_RESULT_OK;
 				}
-			} 
+			}
 		}
 	}
 }
@@ -352,18 +353,21 @@ MODULE = Win32::DirSize		PACKAGE = Win32::DirSize
 PROTOTYPES: DISABLE
 
 double
-best_convert (char& unit, unsigned long highsize, unsigned long lowsize)
+best_convert (SV* unit, unsigned long highsize, unsigned long lowsize)
+	INIT:
+		char cunit;
 	CODE:
-			if (highsize	>= 268435456)	unit = 'E';
-		else	if (highsize	>= 262144)	unit = 'P';
-		else	if (highsize	>= 256)		unit = 'T';
-		else	if (highsize	>= 1)		unit = 'G';
-		else	if (lowsize	>= 1073741824)	unit = 'G';
-		else	if (lowsize	>= 1048576)	unit = 'M';
-		else	if (lowsize	>= 1024)	unit = 'K';
-		else					unit = 'B';
-	
-		RETVAL = unit_convert(unit, highsize, lowsize);
+			if (highsize	>= 268435456)	cunit = 'E';
+		else	if (highsize	>= 262144)	cunit = 'P';
+		else	if (highsize	>= 256)		cunit = 'T';
+		else	if (highsize	>= 1)		cunit = 'G';
+		else	if (lowsize	>= 1073741824)	cunit = 'G';
+		else	if (lowsize	>= 1048576)	cunit = 'M';
+		else	if (lowsize	>= 1024)	cunit = 'K';
+		else					cunit = 'B';
+
+		sv_setpvn(unit, &cunit, 1);
+		RETVAL = unit_convert(cunit, highsize, lowsize);
 	OUTPUT:
 		RETVAL
 		unit
@@ -378,7 +382,7 @@ size_convert (char unit, unsigned long highsize, unsigned long lowsize)
 int
 disk_space(char* dirname, SV* dirinfo)
 	INIT:
-		HV *hvdirinfo		= newHV();
+		HV *hvdirinfo = newHV();
 		ULARGE_INTEGER i64QuotaBytes;
 		ULARGE_INTEGER i64TotalBytes;
 		ULARGE_INTEGER i64FreeBytes;
@@ -456,7 +460,7 @@ dir_size(char* dirname, SV* dirinfo, int wantpermsdie=0, int wantotherdie=0)
 
 				free(rootname);
 				clustersize = (BytesPerSector * SectorsPerCluster);
-	
+
 				if (debug) printf("cluster size = %i\n", clustersize);
 
 				RETVAL = process_dir (_towchar(dirname), averrs, &scandata);

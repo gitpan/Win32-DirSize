@@ -45,3 +45,10 @@ Revision history for Perl extension Win32::DirSize.
 1.12  2003-12-16
 	- fixed a null termination bug in best_convert() 
 		and size_convert (Thanks Chuck Lawhorn)
+
+1.13  2005-05-02
+	- fixed a warning in best_convert: 
+		"Use of uninitialized value in subroutine entry" 
+		(Thanks Mike Freedman)
+	- corrected a possible access violation during
+		an out-of-memory condition
